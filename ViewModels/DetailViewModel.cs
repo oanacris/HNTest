@@ -3,14 +3,16 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
+using HNTest.Events;
+using Prism.Events;
 using Prism.Services.Dialogs;
 
 namespace HNTest.ViewModels
 {
     public class DetailViewModel : BindableBase, INavigationAware
     {
-        private readonly IDataSourceService _dataSourceService;
-        private readonly IDialogService _dialogService;
+        private BestStoriesViewModel _selectedStory;
+        private ObservableCollection<HNItemViewModel> _bestStory;
 
         public ObservableCollection<HNItemViewModel> BestStory
         {
@@ -18,24 +20,35 @@ namespace HNTest.ViewModels
             set => SetProperty(ref _bestStory, value);
         }
 
-        public DetailViewModel(IDataSourceService dataSourceService, IDialogService dialogService)
-        {
-            _dataSourceService = dataSourceService;
-            _dialogService = dialogService;
-            BestStory = new ObservableCollection<HNItemViewModel>();
-            OnDetails("37098483");
 
-        }
-        private void OnDetails(string id)
+        public BestStoriesViewModel SelectedStory
         {
-            var story =  _dataSourceService.GetHNById(id);
-            BestStory.Add(new HNItemViewModel(story.Result)); 
+            get => _selectedStory;
+            set
+            {
+                SetProperty(ref _selectedStory, value);
+            }
         }
+
+        public DetailViewModel(IEventAggregator eventAggregator)
+        {
+            eventAggregator.GetEvent<StorySentEvent>().Subscribe(OnStoryReceived);
+            eventAggregator.GetEvent<StoryDetailSentEvent>().Subscribe(OnStoryDetailReceived);
+        }
+
+        private void OnStoryDetailReceived(HNItemViewModel bestStory)
+        {
+            BestStory = new ObservableCollection<HNItemViewModel> { bestStory };
+        }
+
+        private void OnStoryReceived(BestStoriesViewModel story)
+        {
+            SelectedStory = story;
+        }
+        
 
 
         private string _title = "DetailView";
-        private ObservableCollection<HNItemViewModel> _bestStory;
-
         public string Title
         {
             get
@@ -47,19 +60,18 @@ namespace HNTest.ViewModels
                 SetProperty(ref _title, value);
             }
         }
+
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            throw new NotImplementedException();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
             return true;
         }
-
+        
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            throw new NotImplementedException();
         }
     }
 }

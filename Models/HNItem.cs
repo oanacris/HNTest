@@ -16,6 +16,7 @@ namespace HNTest.Models
         public List<int> Kids { get; set; }
 
         public double Time { get; set; }
+        public DateTime TimeDateTime { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
         public string Url { get; set; }

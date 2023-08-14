@@ -23,10 +23,13 @@
         </Style>
     </UserControl.Resources>
     <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions> 
         <Border
             Grid.Row="0"
@@ -34,8 +37,8 @@
             Background="#5B5B5B" />
 
         <TextBlock Grid.Row="1" Grid.Column="0" 
-                   Text="Details" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <DataGrid Grid.Row="2" Grid.Column="6" ItemsSource="{Binding BestStory}"
+                   Text="{Binding SelectedStory.Id}" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <DataGrid Grid.Row="2" Grid.Column="0" ItemsSource="{Binding BestStory}"
             AutoGenerateColumns="False" 
             AllowDrop="False"
             CanUserReorderColumns="False"
@@ -53,7 +56,7 @@
             VerticalAlignment="Stretch">
 
             <DataGrid.Columns>
-                <DataGridTemplateColumn  Header="Id" MinWidth="140" CanUserResize="False" CanUserSort="False" IsReadOnly="True">
+                <DataGridTemplateColumn  Header="Id" Width="Auto" CanUserResize="False" CanUserSort="False" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate >
                         <DataTemplate>
                             <Grid  VerticalAlignment="Stretch"
@@ -68,9 +71,8 @@
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn   Header="Title" Width="*" MinWidth="190"  CanUserResize="False" CanUserSort="False" IsReadOnly="True">
+                <DataGridTemplateColumn   Header="Title" Width="*" CanUserResize="False" CanUserSort="False" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel
@@ -86,7 +88,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn   Header="Posted By"  MinWidth="150"  CanUserResize="False" CanUserSort="False" IsReadOnly="True">
+                <DataGridTemplateColumn Width="Auto" Header="Posted By" CanUserResize="False" CanUserSort="False" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel
@@ -94,7 +96,7 @@
                                 Orientation="Horizontal">
                                 <TextBlock
                                     VerticalAlignment="Center"
-                                    FontSize="35"
+                                    FontSize="16"
                                     Text="{Binding PostedBy, Mode=OneWay}"
                                     TextAlignment="Center" />
 
@@ -102,46 +104,44 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn   Header="Score" MinWidth="200" CanUserResize="False" CanUserSort="False" IsReadOnly="True">
+                <DataGridTemplateColumn Width="Auto" Header="Score" CanUserResize="False" CanUserSort="False" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal">
                                 <TextBlock
-                                    Width="70"
                                     VerticalAlignment="Center"
-                                    FontSize="35"
+                                    FontSize="16"
                                     Text="{Binding Score, Mode=OneWay}"
                                     TextAlignment="Center" />
                               </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn   Header="Time" MinWidth="220" CanUserResize="False" CanUserSort="False" IsReadOnly="True">
+                <DataGridTemplateColumn Width="*" Header="DateTime" CanUserResize="False" CanUserSort="False" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal"> 
                                 <TextBlock
-                                    Width="70"
                                     VerticalAlignment="Center"
-                                    FontSize="35"
-                                    Text="{Binding Time, Mode=OneWay}"
+                                    FontSize="16"
+                                    Text="{Binding TimeDateTime, Mode=OneWay}"
                                     TextAlignment="Center" /> 
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn  Header="Url" MinWidth="260" CanUserResize="False" CanUserSort="False" IsReadOnly="True">
+                <DataGridTemplateColumn Width="*" Header="Url" CanUserResize="False" CanUserSort="False" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate> 
                             <StackPanel
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal">
                                 <TextBlock>
-                                    <Hyperlink NavigateUri="www.google.com">
+                                    <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
                                         <Hyperlink.Inlines>
                                             <Run Text="{Binding Url}"/>
                                         </Hyperlink.Inlines>

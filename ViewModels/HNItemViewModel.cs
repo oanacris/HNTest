@@ -16,6 +16,7 @@ namespace HNTest.ViewModels
         private string _url;
         private int _score;
         private double _time;
+        private DateTime _timeDateTime;
 
         public HNItemViewModel(HNItem item)
         {
@@ -25,7 +26,15 @@ namespace HNTest.ViewModels
             Score = item.Score;
             Time = item.Time;
             Url = item.Url;
+            TimeDateTime = UnixTimeStampToDateTime(item.Time);
+        }
 
+        private DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            // Unix timestamp is seconds past epoch
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dateTime;
         }
 
         public double Id
@@ -58,6 +67,13 @@ namespace HNTest.ViewModels
             set { SetProperty(ref _time, value); }
         }
 
+        public DateTime TimeDateTime
+        {
+            get => _timeDateTime;
+            set { SetProperty(ref _timeDateTime, value); }
+        }
+
+        
         public int Score
         {
             get => _score;

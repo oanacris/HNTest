@@ -4,8 +4,10 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
-using HNTest.DataSource; 
+using HNTest.DataSource;
+using HNTest.Events;
 using HNTest.Models;
+using Prism.Events;
 
 namespace HNTest.ViewModels
 {
@@ -13,6 +15,7 @@ namespace HNTest.ViewModels
     {
 
         private readonly IDataSourceService _dataSourceService;
+        private readonly IEventAggregator _eventAggregator;
 
         public ObservableCollection<BestStoriesViewModel> BestStories
         {
@@ -29,9 +32,10 @@ namespace HNTest.ViewModels
         public DelegateCommand SubmitCommand { get; private set; } 
 
 
-        public GeneralViewModel(IDataSourceService dataSourceService)
+        public GeneralViewModel(IDataSourceService dataSourceService, IEventAggregator eventAggregator)
         {
             _dataSourceService = dataSourceService;
+            _eventAggregator = eventAggregator;
             BestStories = new ObservableCollection<BestStoriesViewModel>();
 
             RefreshCommand = new DelegateCommand(OnRefresh, CanRefresh);
@@ -118,8 +122,24 @@ namespace HNTest.ViewModels
             set
             {
                 SetProperty(ref _selectedStory, value);
+                SendStory();
+                SendDetails();
                 SubmitCommand.RaiseCanExecuteChanged();
             }
+        }
+
+        private void SendStory()
+        {
+            _eventAggregator.GetEvent<StorySentEvent>().Publish(SelectedStory);
+        }
+
+
+        private void SendDetails()
+        {
+            var story = _dataSourceService.GetHNById(SelectedStory?.Id.ToString());
+            _eventAggregator.GetEvent<StoryDetailSentEvent>().Publish(SelectedStory == null
+                ? new HNItemViewModel(new HNItem())
+                : new HNItemViewModel(story.Result));
         }
     }
 }

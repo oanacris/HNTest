@@ -76,6 +76,8 @@
     </ApplicationDefinition>
     <Compile Include="DataSource\DataSourceService.cs" />
     <Compile Include="DataSource\IDataSourceService.cs" />
+    <Compile Include="Events\StoryDetailSentEvent.cs" />
+    <Compile Include="Events\StorySentEvent.cs" />
     <Compile Include="Models\HN.cs" />
     <Compile Include="Models\HNItem.cs" />
     <Compile Include="Modules\MainModule.cs" />
@@ -137,8 +139,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
